@@ -1,0 +1,10 @@
+[
+  {
+    "type": "console.page/route",
+    "properties": {
+      "exact": true,
+      "path": "/dashboards-datasource-plugin",
+      "component": { "$codeRef": "ProxyTestPage" }
+    }
+  }
+]
