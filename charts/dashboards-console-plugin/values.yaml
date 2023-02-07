@@ -1,9 +1,9 @@
 ---
 plugin:
-  name: ""
+  name: "dashboards-console-plugin"
   description: ""
-  image: ""
-  imagePullPolicy: IfNotPresent
+  image: "quay.io/gbernal/dashboards-console-plugin:dev"
+  imagePullPolicy: Always
   replicas: 2
   port: 9443
   securityContext:
@@ -24,7 +24,7 @@ plugin:
       cpu: 10m
       memory: 50Mi
   basePath: /
-  certificateSecretName: ""
+  certificateSecretName: "plugin-serving-cert"
   serviceAccount:
     create: true
     annotations: {}

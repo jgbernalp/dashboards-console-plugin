@@ -70,3 +70,10 @@ Create the name of the service account to use
 {{- default "default" .Values.plugin.patcherServiceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Create the name of the configmap reader
+*/}}
+{{- define "openshift-console-plugin.configMapReaderName" -}}
+{{- printf "%s-configmap-reader" (include "openshift-console-plugin.name" .) }}
+{{- end }}

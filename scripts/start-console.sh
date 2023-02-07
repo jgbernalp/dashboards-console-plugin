@@ -20,7 +20,7 @@ set -e
 BRIDGE_K8S_AUTH_BEARER_TOKEN=$(oc whoami --show-token 2>/dev/null)
 BRIDGE_USER_SETTINGS_LOCATION="localstorage"
 
-PLUGIN_PROXY='{"services": [{"consoleAPIPath": "/api/proxy/plugin/dashboards-datasource-plugin/backend/", "authorize": true, "endpoint": "http://localhost:9000/api/kubernetes/api/v1/"}]}'
+PLUGIN_PROXY='{"services": [{"consoleAPIPath": "/api/proxy/plugin/dashboards-console-plugin/backend/", "authorize": true, "endpoint": "http://localhost:9001/"}]}'
 
 # Don't fail if the cluster doesn't have gitops.
 set +e

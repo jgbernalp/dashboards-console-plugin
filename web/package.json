@@ -1,8 +1,8 @@
 {
-  "name": "dashboards-datasource-plugin",
+  "name": "dashboards-console-plugin",
   "version": "0.0.1",
   "private": true,
-  "repository": "git@github.com:jgbernalp/dashboards-datasource-plugin.git",
+  "repository": "git@github.com:jgbernalp/dashboards-console-plugin.git",
   "license": "Apache-2.0",
   "scripts": {
     "clean": "rm -rf dist",
@@ -49,12 +49,13 @@
     "webpack-dev-server": "^4.7.4"
   },
   "consolePlugin": {
-    "name": "dashboards-datasource-plugin",
+    "name": "dashboards-console-plugin",
     "version": "0.0.1",
-    "displayName": "Dashboards datasource plugin",
-    "description": "Plugin to add proxy configurations from to console to in-cluster services to populate dashboards",
+    "displayName": "Dashboards console plugin",
+    "description": "Plugin to add proxy configurations from console to in-cluster services to populate dashboards",
     "exposedModules": {
-      "ProxyTestPage": "./components/ProxyTestPage"
+      "ProxyTestPage": "./components/ProxyTestPage",
+      "GetDatasource": "./getDatasource"
     },
     "dependencies": {
       "@console/pluginAPI": "*"

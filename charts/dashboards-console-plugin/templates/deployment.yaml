@@ -16,9 +16,17 @@ spec:
       labels:
             {{- include "openshift-console-plugin.labels" . | nindent 8 }}
     spec:
+      serviceAccountName: {{ include "openshift-console-plugin.serviceAccountName" . }}
       containers:
         - name: {{ template "openshift-console-plugin.name" . }}
           image: {{ required "Plugin image must be specified!" .Values.plugin.image }}
+          args:
+            - "-port"
+            - "{{ .Values.plugin.port }}"
+            - "-cert"
+            - "/var/cert/tls.crt"
+            - "-key"
+            - "/var/cert/tls.key"
           ports:
             - containerPort: {{ .Values.plugin.port }}
               protocol: TCP
@@ -32,18 +40,10 @@ spec:
             - name: {{ template "openshift-console-plugin.certificateSecret" . }}
               readOnly: true
               mountPath: /var/cert
-            - name: nginx-conf
-              readOnly: true
-              mountPath: /etc/nginx/nginx.conf
-              subPath: nginx.conf
       volumes:
         - name: {{ template "openshift-console-plugin.certificateSecret" . }}
           secret:
             secretName: {{ template "openshift-console-plugin.certificateSecret" . }}
-            defaultMode: 420
-        - name: nginx-conf
-          configMap:
-            name: {{ template "openshift-console-plugin.name" . }}
             defaultMode: 420
       restartPolicy: Always
       dnsPolicy: ClusterFirst
