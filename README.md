@@ -2,6 +2,12 @@
 
 This plugin adds custom datasources for openshift dashboards. It requires OpenShift 4.10+
 
+##
+
+- [Development](#development)
+- [Deployment on cluster](#deployment-on-cluster)
+- [Add a new Datasource](#add-a-new-datasource)
+
 ## Development
 
 [Node.js](https://nodejs.org/en/), [npm](https://www.npmjs.com/) and [go](https://go.dev/) are required
@@ -23,9 +29,15 @@ runs on port 9002 with CORS enabled.
 
 Navigate to <http://localhost:9000> to see the running plugin.
 
+### Build a testing the image
+
+```sh
+make build-image
+```
+
 ## Deployment on cluster
 
-You can deploy the plugin to a cluster by running the helm chart at `charts/dashboards-console-plugin`.
+You can deploy the plugin into a cluster by running the helm chart at `charts/dashboards-console-plugin`.
 It will use the image from `quay.io/gbernal/dashboards-console-plugin:0.0.1` and run a go HTTP server
 to serve the plugin's assets and proxy to the configured datasources.
 
@@ -33,8 +45,6 @@ to serve the plugin's assets and proxy to the configured datasources.
 helm upgrade -i  dashboards-console-plugin charts/dashboards-console-plugin -n console-dashboards --create-namespace
 ```
 
-## Build a testing the image
+## Add a new Datasource
 
-```sh
-make build-image
-```
+See [add datasource docs](docs/add-datasource.md)
