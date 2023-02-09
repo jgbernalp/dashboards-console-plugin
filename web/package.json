@@ -60,5 +60,8 @@
     "dependencies": {
       "@console/pluginAPI": "*"
     }
+  },
+  "dependencies": {
+    "lru-cache": "^7.14.1"
   }
 }

@@ -4,7 +4,7 @@ set -euo pipefail
 
 PREFER_PODMAN=0
 PUSH=0
-TAG="dev"
+TAG="0.0.1"
 REGISTRY_ORG="gbernal"
 
 while getopts ":pto:" flag; do
