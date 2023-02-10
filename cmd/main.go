@@ -5,7 +5,7 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/jgbernalp/dashboards-datasource-plugin/pkg/server"
+	server "github.com/jgbernalp/dashboards-datasource-plugin/pkg/server"
 	"github.com/sirupsen/logrus"
 )
 
@@ -35,10 +35,11 @@ func main() {
 	logrus.SetLevel(lvl)
 
 	server.Start(&server.Config{
-		Port:           port,
-		CertFile:       cert,
-		PrivateKeyFile: key,
-		StaticPath:     staticPath,
+		Port:                port,
+		CertFile:            cert,
+		PrivateKeyFile:      key,
+		StaticPath:          staticPath,
+		DashboardsNamespace: "console-dashboards",
 	})
 }
 

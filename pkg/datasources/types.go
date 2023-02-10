@@ -1,4 +1,4 @@
-package api
+package datasources
 
 type Service struct {
 	Name      string `json:"name"`

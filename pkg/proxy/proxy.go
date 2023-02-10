@@ -12,7 +12,7 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
-	models "github.com/jgbernalp/dashboards-datasource-plugin/pkg/api"
+	datasources "github.com/jgbernalp/dashboards-datasource-plugin/pkg/datasources"
 	oscrypto "github.com/openshift/library-go/pkg/crypto"
 	"github.com/sirupsen/logrus"
 )
@@ -39,17 +39,27 @@ func FilterHeaders(r *http.Response) error {
 	return nil
 }
 
-func CreateProxyHandler(serviceCAfile string, datasourcesInfo map[string]models.DataSource) func(http.ResponseWriter, *http.Request) {
-	datasourceProxies := make(map[string]*httputil.ReverseProxy)
+func getProxy(datasourceName string, serviceCAfile string, datasourceManager *datasources.DatasourceManager) *httputil.ReverseProxy {
+	existingProxy := datasourceManager.GetProxy(datasourceName)
+
+	if existingProxy != nil {
+		return existingProxy
+	}
+
+	datasource := datasourceManager.GetDatasource(datasourceName)
+
+	if datasource == nil {
+		return nil
+	}
 
 	// TODO: allow custom CA per datasource
 	serviceCertPEM, err := os.ReadFile(serviceCAfile)
 	if err != nil {
-		log.Fatalf("failed to read %s file: %v", serviceCAfile, err)
+		log.Errorf("failed to read certificate file: tried '%s' and got %v", serviceCAfile, err)
 	}
 	serviceProxyRootCAs := x509.NewCertPool()
 	if !serviceProxyRootCAs.AppendCertsFromPEM(serviceCertPEM) {
-		log.Fatal("no CA found for Kubernetes services")
+		log.Error("no CA found for Kubernetes services, proxy to datasources will fail")
 	}
 	serviceProxyTLSConfig := oscrypto.SecureTLSConfig(&tls.Config{
 		RootCAs: serviceProxyRootCAs,
@@ -65,36 +75,38 @@ func CreateProxyHandler(serviceCAfile string, datasourcesInfo map[string]models.
 		TLSHandshakeTimeout: 10 * time.Second,
 	}
 
-	for name, datasource := range datasourcesInfo {
-		targetURL := fmt.Sprintf("https://%s.%s.svc.cluster.local:%d", datasource.Spec.Plugin.Spec.Service.Name, datasource.Spec.Plugin.Spec.Service.Namespace, datasource.Spec.Plugin.Spec.Service.Port)
-		proxyURL, err := url.Parse(targetURL)
+	targetURL := fmt.Sprintf("https://%s.%s.svc.cluster.local:%d", datasource.Spec.Plugin.Spec.Service.Name, datasource.Spec.Plugin.Spec.Service.Namespace, datasource.Spec.Plugin.Spec.Service.Port)
+	proxyURL, err := url.Parse(targetURL)
 
-		if err != nil {
-			log.WithError(err).Errorf("cannot parse service URL", targetURL)
-		} else {
-			reverseProxy := httputil.NewSingleHostReverseProxy(proxyURL)
-			reverseProxy.FlushInterval = time.Millisecond * 100
-			reverseProxy.Transport = transport
-			reverseProxy.ModifyResponse = FilterHeaders
-			datasourceProxies[name] = reverseProxy
-		}
+	if err != nil {
+		log.WithError(err).Errorf("cannot parse service URL", targetURL)
+		return nil
+	} else {
+		reverseProxy := httputil.NewSingleHostReverseProxy(proxyURL)
+		reverseProxy.FlushInterval = time.Millisecond * 100
+		reverseProxy.Transport = transport
+		reverseProxy.ModifyResponse = FilterHeaders
+		datasourceManager.SetProxy(datasourceName, reverseProxy)
+		return reverseProxy
 	}
+}
 
+func CreateProxyHandler(serviceCAfile string, datasourceManager *datasources.DatasourceManager) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 		datasourceName := vars["datasourceName"]
 
 		if len(datasourceName) == 0 {
 			log.Errorf("cannot proxy request, datasource name was not provided")
-			http.Error(w, "datasource name was not provided", http.StatusBadRequest)
+			http.Error(w, "cannot proxy request, datasource name was not provided", http.StatusBadRequest)
 			return
 		}
 
-		datasourceProxy, ok := datasourceProxies[datasourceName]
+		datasourceProxy := getProxy(datasourceName, serviceCAfile, datasourceManager)
 
-		if !ok || datasourceProxy == nil {
-			log.Errorf("cannot proxy request, datasource not found: %s", datasourceName)
-			http.Error(w, "datasource not found", http.StatusNotFound)
+		if datasourceProxy == nil {
+			log.Errorf("cannot proxy request, invalid datasource proxy: %s", datasourceName)
+			http.Error(w, "cannot proxy request, invalid datasource proxy", http.StatusNotFound)
 			return
 		}
 

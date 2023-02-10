@@ -5,13 +5,13 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	models "github.com/jgbernalp/dashboards-datasource-plugin/pkg/api"
+	"github.com/jgbernalp/dashboards-datasource-plugin/pkg/datasources"
 	"github.com/sirupsen/logrus"
 )
 
 var log = logrus.WithField("module", "datasources-api")
 
-func CreateDashboardsHandler(datasourcesInfo map[string]models.DataSource) func(http.ResponseWriter, *http.Request) {
+func CreateDashboardsHandler(datasourceManager *datasources.DatasourceManager) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 		datasourceName := vars["name"]
@@ -22,9 +22,9 @@ func CreateDashboardsHandler(datasourcesInfo map[string]models.DataSource) func(
 			return
 		}
 
-		datasource, ok := datasourcesInfo[datasourceName]
+		datasource := datasourceManager.GetDatasource(datasourceName)
 
-		if !ok {
+		if datasource == nil {
 			log.Errorf("datasource not found: %s", datasourceName)
 			http.Error(w, "datasource not found", http.StatusNotFound)
 			return
