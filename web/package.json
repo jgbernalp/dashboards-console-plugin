@@ -55,7 +55,8 @@
     "description": "Plugin to add proxy configurations from console to in-cluster services to populate dashboards",
     "exposedModules": {
       "ProxyTestPage": "./components/ProxyTestPage",
-      "GetDatasource": "./getDatasource"
+      "GetDatasource": "./getDatasource",
+      "PersesPage": "./components/PersesPage"
     },
     "dependencies": {
       "@console/pluginAPI": "*"
