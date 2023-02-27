@@ -2,7 +2,7 @@
 
 The plugin will search for datasources as ConfigMaps in the `console-dashboards` namespace with the `console.openshift.io/dashboard-datasource: 'true'` label
 
-The configmap must define a datasource type and a in-cluster service where the data can be fetched:
+The configmap must define a datasource type and an in-cluster service where the data can be fetched:
 
 ```
 apiVersion: v1
