@@ -13,23 +13,5 @@
       "contextId": "monitoring-dashboards",
       "getDataSource": { "$codeRef": "GetDatasource" }
     }
-  }, 
-  {
-    "type": "console.navigation/href",
-    "properties": {
-      "id": "monitoringperses",
-      "name": "Perses Dashboards",
-      "href": "/perses-dashboards",
-      "perspective": "admin",
-      "section": "observe"
-    }
-  },
-  {
-    "type": "console.page/route",
-    "properties":{
-      "component": { "$codeRef": "PersesPage" },
-      "path":  "/perses-dashboards"
-    }
   }
 ]
- 
