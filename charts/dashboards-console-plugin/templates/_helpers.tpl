@@ -26,6 +26,18 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
 {{/*
+Common labels
+*/}}
+{{- define "openshift-console-perses.labels" -}}
+helm.sh/chart: {{ include "openshift-console-plugin.chart" . }}
+{{ include "openshift-console-perses.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+{{/*
 Selector labels
 */}}
 {{- define "openshift-console-plugin.selectorLabels" -}}
@@ -36,10 +48,27 @@ app.kubernetes.io/part-of: {{ include "openshift-console-plugin.name" . }}
 {{- end }}
 
 {{/*
-Create the name secret containing the certificate
+Perses selector labels
+*/}}
+{{- define "openshift-console-perses.selectorLabels" -}}
+app: {{ include "openshift-console-perses.name" . }}
+app.kubernetes.io/name: {{ include "openshift-console-perses.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/part-of: {{ include "openshift-console-perses.name" . }}
+{{- end }}
+
+{{/*
+Create the name secret containing the perses certificate
 */}}
 {{- define "openshift-console-plugin.certificateSecret" -}}
 {{ default (printf "%s-cert" (include "openshift-console-plugin.name" .)) .Values.plugin.certificateSecretName }}
+{{- end }}
+
+{{/*
+Create the name secret containing the plugin certificate
+*/}}
+{{- define "openshift-console-perses.certificateSecret" -}}
+{{ default (printf "%s-cert" (include "openshift-console-perses.name" .)) .Values.perses.certificateSecretName }}
 {{- end }}
 
 {{/*
@@ -76,4 +105,11 @@ Create the name of the configmap reader
 */}}
 {{- define "openshift-console-plugin.configMapReaderName" -}}
 {{- printf "%s-configmap-reader" (include "openshift-console-plugin.name" .) }}
+{{- end }}
+
+{{/*
+Create the name for perses
+*/}}
+{{- define "openshift-console-perses.name" -}}
+{{- default (default .Chart.Name .Release.Name) .Values.perses.name | trunc 63 | trimSuffix "-" }}
 {{- end }}

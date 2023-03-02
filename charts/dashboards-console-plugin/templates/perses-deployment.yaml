@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "openshift-console-perses.name" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "openshift-console-perses.labels" . | nindent 4 }}
+    app.openshift.io/runtime-namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "openshift-console-perses.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+            {{- include "openshift-console-perses.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: perses-proxy
+          image: docker.io/nginx:latest
+          ports:
+            - containerPort: 9443
+              protocol: TCP
+          imagePullPolicy: {{ .Values.perses.imagePullPolicy }}
+          {{- if and (.Values.perses.securityContext.enabled) (.Values.perses.containerSecurityContext) }}
+          securityContext: {{ tpl (toYaml (omit .Values.perses.containerSecurityContext "enabled")) $ | nindent 12 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.perses.resources | nindent 12 }}
+          volumeMounts:
+            - name: {{ template "openshift-console-perses.certificateSecret" . }}
+              readOnly: true
+              mountPath: /var/cert
+            - name: nginx-conf
+              readOnly: true
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+        - name: {{ template "openshift-console-perses.name" . }}
+          image: {{ required "Perses image must be specified!" .Values.perses.image }}
+          ports:
+            - containerPort: {{ .Values.perses.port }}
+              protocol: TCP
+          imagePullPolicy: {{ .Values.perses.imagePullPolicy }}
+          {{- if and (.Values.perses.securityContext.enabled) (.Values.perses.containerSecurityContext) }}
+          securityContext: {{ tpl (toYaml (omit .Values.perses.containerSecurityContext "enabled")) $ | nindent 12 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.perses.resources | nindent 12 }}
+      volumes:
+        - name: {{ template "openshift-console-perses.certificateSecret" . }}
+          secret:
+            secretName: {{ template "openshift-console-perses.certificateSecret" . }}
+            defaultMode: 420
+        - name: nginx-conf
+          configMap:
+            name: {{ template "openshift-console-perses.name" . }}
+            defaultMode: 420
+      restartPolicy: Always
+      dnsPolicy: ClusterFirst
+      {{- if and (.Values.perses.securityContext.enabled) (.Values.perses.podSecurityContext) }}
+      securityContext: {{ tpl (toYaml (omit .Values.perses.podSecurityContext "enabled")) $ | nindent 8 }}
+      {{- end }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%

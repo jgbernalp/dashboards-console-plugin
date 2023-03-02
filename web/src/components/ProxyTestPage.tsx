@@ -5,15 +5,46 @@ const DEFAULT_PROXY_URL =
   '/api/proxy/plugin/dashboards-console-plugin/backend/proxy/cluster-prometheus-proxy/api/v1/status/config';
 const DEFAULT_DATASOURCE_NAME = 'cluster-prometheus-proxy';
 
+const getCSRFToken = () => {
+  const cookiePrefix = 'csrf-token=';
+  return (
+    document &&
+    document.cookie &&
+    document.cookie
+      .split(';')
+      .map((c) => c.trim())
+      .filter((c) => c.startsWith(cookiePrefix))
+      .map((c) => c.slice(cookiePrefix.length))
+      .pop()
+  );
+};
+
 export default function ProxyTestPage() {
   const [response, setResponse] = React.useState<string | undefined>(undefined);
   const [endpoint, setEndpoint] = React.useState<string>(DEFAULT_PROXY_URL);
   const [datasourceName, setDatasourceName] = React.useState<string>(
     DEFAULT_DATASOURCE_NAME,
   );
+  const [fetchOptions, setFetchOptions] = React.useState<
+    Record<string, string>
+  >({
+    method: 'GET',
+  });
 
   const handleFetch = () => {
-    fetch(endpoint)
+    fetch(endpoint, {
+      body:
+        fetchOptions.method === 'POST'
+          ? JSON.stringify(fetchOptions.body)
+          : undefined,
+      method: fetchOptions.method,
+      headers: {
+        'Content-Type': 'application/json',
+        ...(fetchOptions.method === 'POST'
+          ? { 'X-CSRFToken': getCSRFToken() }
+          : {}),
+      },
+    })
       .then(async (res) => {
         console.log(res);
 
@@ -41,6 +72,14 @@ export default function ProxyTestPage() {
       });
   };
 
+  const updateOption = (field: string, value: string) => {
+    const newOptions = { ...fetchOptions };
+
+    newOptions[field] = value;
+
+    setFetchOptions(newOptions);
+  };
+
   return (
     <div style={{ margin: 'var(--pf-global--spacer--md)' }}>
       <div style={{ marginBottom: 'var(--pf-global--spacer--md)' }}>
@@ -54,6 +93,19 @@ export default function ProxyTestPage() {
           }}
         />
         <button onClick={handleFetch}>Fetch Endpoint</button>
+
+        <select
+          value={fetchOptions.method}
+          onChange={(e) => updateOption('method', e.target.value)}
+        >
+          <option value="GET">GET</option>
+          <option value="POST">POST</option>
+        </select>
+        <textarea
+          placeholder="body content"
+          value={fetchOptions.body}
+          onChange={(e) => updateOption('body', e.target.value)}
+        ></textarea>
       </div>
       <div style={{ marginBottom: 'var(--pf-global--spacer--md)' }}>
         <input
