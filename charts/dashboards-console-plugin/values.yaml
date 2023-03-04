@@ -1,10 +1,34 @@
 ---
+perses:
+  name: "dashboards-console-perses"
+  image: "docker.io/persesdev/perses:latest"
+  imagePullPolicy: Always
+  replicas: 1
+  port: 8080
+  securityContext:
+    enabled: true
+  podSecurityContext:
+    enabled: true
+    runAsNonRoot: true
+    seccompProfile:
+      type: RuntimeDefault
+  containerSecurityContext:
+    enabled: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+  resources:
+    requests:
+      cpu: 10m
+      memory: 50Mi
+  certificateSecretName: "perses-serving-cert"
 plugin:
   name: "dashboards-console-plugin"
   description: ""
-  image: "quay.io/gbernal/dashboards-console-plugin:0.0.1"
+  image: "quay.io/gbernal/dashboards-console-plugin:dev"
   imagePullPolicy: Always
-  replicas: 2
+  replicas: 1
   port: 9443
   securityContext:
     enabled: true

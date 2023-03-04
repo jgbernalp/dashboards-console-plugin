@@ -20,3 +20,10 @@ spec:
         name: {{ template "openshift-console-plugin.name" . }}
         namespace: {{ .Release.Namespace }}
         port: {{ .Values.plugin.port }}
+    - type: Service
+      alias: perses
+      authorize: true
+      service:
+        name: {{ template "openshift-console-perses.name" . }}
+        namespace: {{ .Release.Namespace }}
+        port: 9443

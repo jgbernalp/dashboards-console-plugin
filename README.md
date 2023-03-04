@@ -42,7 +42,7 @@ It will use the image from `quay.io/gbernal/dashboards-console-plugin:0.0.1` and
 to serve the plugin's assets and proxy to the configured datasources.
 
 ```sh
-helm upgrade -i  dashboards-console-plugin charts/dashboards-console-plugin -n console-dashboards --create-namespace
+helm upgrade -i dashboards-console-plugin charts/dashboards-console-plugin -n console-dashboards --create-namespace
 ```
 
 ## Add a new Datasource
