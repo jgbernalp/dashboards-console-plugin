@@ -98,7 +98,7 @@ export const dashboardSample: DashboardResource = {
                     plugin: {
                       kind: 'PrometheusTimeSeriesQuery',
                       spec: {
-                        query: 'sum(rate(grpc_server_started_total{job="$cluster",grpc_type="unary"}[$interval]))',
+                        query: 'sum(rate(grpc_server_started_total{job="etcd",grpc_type="unary"}[5m]))',
                         series_name_format: 'RPC rate',
                       },
                     },
