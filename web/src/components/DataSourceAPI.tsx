@@ -7,7 +7,10 @@ export function useDatasourceApi(): DatasourceStoreProviderProps['datasourceApi'
       return undefined;
     },
     getGlobalDatasource: async (selector) => {
-      if (selector.kind === 'PrometheusDatasource' && selector.name === undefined) {
+      if (
+        selector.kind === 'PrometheusDatasource' &&
+        selector.name === undefined
+      ) {
         return {
           resource: datasource,
           proxyUrl: undefined,
@@ -43,7 +46,7 @@ const datasource: GlobalDatasource = {
     plugin: {
       kind: 'PrometheusDatasource',
       spec: {
-        direct_url: "http://localhost:9000/api/prometheus",
+        direct_url: 'http://localhost:9000/api/prometheus',
       },
     },
   },

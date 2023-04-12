@@ -1,7 +1,7 @@
 import React from 'react';
 import { Dropdown, DropdownToggle, DropdownItem } from '@patternfly/react-core';
 
-export function ClusterDropDown () {
+export function ClusterDropDown() {
   const [isOpen, setIsOpen] = React.useState(false);
 
   const onToggle = (isOpen: boolean) => {
@@ -36,4 +36,4 @@ export function ClusterDropDown () {
       dropdownItems={dropdownItems}
     />
   );
-};
+}

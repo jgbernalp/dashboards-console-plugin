@@ -1,7 +1,11 @@
 // Eagerly load the metadata for the bundled plugins, but lazy-load the plugins
 import prometheusResource from '@perses-dev/prometheus-plugin/plugin.json';
 import panelsResource from '@perses-dev/panels-plugin/plugin.json';
-import { PluginModuleResource, PluginLoader, dynamicImportPluginLoader } from '@perses-dev/plugin-system';
+import {
+  PluginModuleResource,
+  PluginLoader,
+  dynamicImportPluginLoader,
+} from '@perses-dev/plugin-system';
 
 /**
  * A PluginLoader that includes all the "built-in" plugins that are bundled with Perses by default and additional custom plugins

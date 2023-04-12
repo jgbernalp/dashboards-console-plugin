@@ -1,8 +1,7 @@
 import { DateTimeRangePicker, TimeOption } from '@perses-dev/components';
 import { useTimeRange } from '@perses-dev/plugin-system';
 
-export function TimeRangeDropDown () {
-
+export function TimeRangeDropDown() {
   const TIME_OPTIONS: TimeOption[] = [
     { value: { pastDuration: '5m' }, display: 'Last 5 minutes' },
     { value: { pastDuration: '15m' }, display: 'Last 15 minutes' },
@@ -14,14 +13,19 @@ export function TimeRangeDropDown () {
     { value: { pastDuration: '7d' }, display: 'Last 7 days' },
     { value: { pastDuration: '14d' }, display: 'Last 14 days' },
   ];
-  
+
   const { timeRange, setTimeRange } = useTimeRange();
-  const DEFAULT_HEIGHT = '34px'; 
-  const height = DEFAULT_HEIGHT 
+  const DEFAULT_HEIGHT = '34px';
+  const height = DEFAULT_HEIGHT;
 
   return (
     <div>
-      <DateTimeRangePicker timeOptions={TIME_OPTIONS} value={timeRange} onChange={setTimeRange} height={height} />
+      <DateTimeRangePicker
+        timeOptions={TIME_OPTIONS}
+        value={timeRange}
+        onChange={setTimeRange}
+        height={height}
+      />
     </div>
   );
-};
+}

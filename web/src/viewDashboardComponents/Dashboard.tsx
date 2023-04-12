@@ -16,12 +16,10 @@ import { ErrorBoundary, ErrorAlert } from '@perses-dev/components';
 import { usePanelGroupIds } from '@perses-dev/dashboards';
 import { GridLayout } from './GridLayout';
 
-// TODO 
-export const EmptyDashboard = () =>  {
-    return (
-        <h1> TODO Empty Dashboard Placeholder </h1>
-    )
-}
+// TODO
+export const EmptyDashboard = () => {
+  return <h1> TODO Empty Dashboard Placeholder </h1>;
+};
 
 export type DashboardProps = BoxProps & {
   /**
@@ -36,15 +34,25 @@ export type DashboardProps = BoxProps & {
 /**
  * Renders a Dashboard for the provided Dashboard spec.
  */
-export function Dashboard({emptyDashboard = <EmptyDashboard />, ...boxProps }: DashboardProps) {
+export function Dashboard({
+  emptyDashboard = <EmptyDashboard />,
+  ...boxProps
+}: DashboardProps) {
   const panelGroupIds = usePanelGroupIds();
   const isEmpty = !panelGroupIds.length;
 
   return (
     <Box {...boxProps} sx={{ height: '100%' }}>
       <ErrorBoundary FallbackComponent={ErrorAlert}>
-        {isEmpty && <Box sx={{ height: '100%', display: 'flex', alignItems: 'center' }}>{emptyDashboard}</Box>}
-        {!isEmpty && panelGroupIds.map((panelGroupId) => <GridLayout key={panelGroupId} panelGroupId={panelGroupId} />)}
+        {isEmpty && (
+          <Box sx={{ height: '100%', display: 'flex', alignItems: 'center' }}>
+            {emptyDashboard}
+          </Box>
+        )}
+        {!isEmpty &&
+          panelGroupIds.map((panelGroupId) => (
+            <GridLayout key={panelGroupId} panelGroupId={panelGroupId} />
+          ))}
       </ErrorBoundary>
     </Box>
   );
