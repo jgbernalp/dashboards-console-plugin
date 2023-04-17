@@ -22,10 +22,10 @@ export const dashboardSample: DashboardResource = {
           plugin: {
             kind: 'StaticListVariable',
             spec: {
-              values: ["etcd"]
-            }
-          }
-        }
+              values: ['etcd'],
+            },
+          },
+        },
       },
       {
         kind: 'ListVariable',
@@ -34,10 +34,10 @@ export const dashboardSample: DashboardResource = {
           plugin: {
             kind: 'StaticListVariable',
             spec: {
-              values: ['etcd']
-            }
-          }
-        }
+              values: ['etcd'],
+            },
+          },
+        },
       },
       {
         kind: 'ListVariable',
@@ -50,7 +50,7 @@ export const dashboardSample: DashboardResource = {
             spec: { values: ['5m', '10m'] },
           },
         },
-      }
+      },
     ],
     panels: {
       Panel1: {
@@ -58,7 +58,7 @@ export const dashboardSample: DashboardResource = {
         spec: {
           display: { name: 'Up' },
           plugin: {
-            kind: 'StatChart', 
+            kind: 'StatChart',
             spec: {
               query: {
                 kind: 'TimeSeriesQuery',
@@ -73,9 +73,9 @@ export const dashboardSample: DashboardResource = {
                 },
               },
               calculation: 'LastNumber',
-              unit: { 
-                kind: 'Decimal',  
-                decimal_places: 0
+              unit: {
+                kind: 'Decimal',
+                decimal_places: 0,
               },
             },
           },
@@ -98,7 +98,8 @@ export const dashboardSample: DashboardResource = {
                     plugin: {
                       kind: 'PrometheusTimeSeriesQuery',
                       spec: {
-                        query: 'sum(rate(grpc_server_started_total{job="etcd",grpc_type="unary"}[5m]))',
+                        query:
+                          'sum(rate(grpc_server_started_total{job="etcd",grpc_type="unary"}[5m]))',
                         series_name_format: 'RPC rate',
                       },
                     },
@@ -110,7 +111,8 @@ export const dashboardSample: DashboardResource = {
                     plugin: {
                       kind: 'PrometheusTimeSeriesQuery',
                       spec: {
-                        query: 'sum(rate(grpc_server_handled_total{job="etcd",grpc_type="unary",grpc_code=~"Unknown|FailedPrecondition|ResourceExhausted|Internal|Unavailable|DataLoss|DeadlineExceeded"}[5m]))',
+                        query:
+                          'sum(rate(grpc_server_handled_total{job="etcd",grpc_type="unary",grpc_code=~"Unknown|FailedPrecondition|ResourceExhausted|Internal|Unavailable|DataLoss|DeadlineExceeded"}[5m]))',
                         series_name_format: 'RPC failed rate',
                       },
                     },
@@ -119,7 +121,11 @@ export const dashboardSample: DashboardResource = {
               ],
               thresholds: {
                 steps: [
-                  { name: 'Alert: Critical condition example', value: 0.5, color: 'yellow' },
+                  {
+                    name: 'Alert: Critical condition example',
+                    value: 0.5,
+                    color: 'yellow',
+                  },
                 ],
               },
               y_axis: {
@@ -147,7 +153,8 @@ export const dashboardSample: DashboardResource = {
                     plugin: {
                       kind: 'PrometheusTimeSeriesQuery',
                       spec: {
-                        query: 'sum(grpc_server_started_total{job=\"etcd\",grpc_service=\"etcdserverpb.Watch\",grpc_type=\"bidi_stream\"}) - sum(grpc_server_handled_total{job=\"etcd\",grpc_service=\"etcdserverpb.Watch\",grpc_type=\"bidi_stream\"})',
+                        query:
+                          'sum(grpc_server_started_total{job="etcd",grpc_service="etcdserverpb.Watch",grpc_type="bidi_stream"}) - sum(grpc_server_handled_total{job="etcd",grpc_service="etcdserverpb.Watch",grpc_type="bidi_stream"})',
                         series_name_format: 'Watch Streams',
                       },
                     },
@@ -159,7 +166,8 @@ export const dashboardSample: DashboardResource = {
                     plugin: {
                       kind: 'PrometheusTimeSeriesQuery',
                       spec: {
-                        query: 'sum(grpc_server_started_total{job=\"etcd\",grpc_service=\"etcdserverpb.Lease\",grpc_type=\"bidi_stream\"}) - sum(grpc_server_handled_total{job=\"etcd\",grpc_service=\"etcdserverpb.Lease\",grpc_type=\"bidi_stream\"})',
+                        query:
+                          'sum(grpc_server_started_total{job="etcd",grpc_service="etcdserverpb.Lease",grpc_type="bidi_stream"}) - sum(grpc_server_handled_total{job="etcd",grpc_service="etcdserverpb.Lease",grpc_type="bidi_stream"})',
                         series_name_format: 'Lease Streams',
                       },
                     },
@@ -170,7 +178,7 @@ export const dashboardSample: DashboardResource = {
                 area_opacity: 0.5,
                 point_radius: 6,
                 line_width: 3,
-                connect_nulls: false
+                connect_nulls: false,
               },
               y_axis: {
                 label: 'Y Axis Label',
@@ -197,19 +205,19 @@ export const dashboardSample: DashboardResource = {
                     plugin: {
                       kind: 'PrometheusTimeSeriesQuery',
                       spec: {
-                        query: 'etcd_mvcc_db_total_size_in_bytes{job=\"etcd\"}',
+                        query: 'etcd_mvcc_db_total_size_in_bytes{job="etcd"}',
                         series_name_format: '{{instance}} DB Size',
                       },
                     },
                   },
-                },  
+                },
               ],
               y_axis: {
                 label: 'Y Axis Label',
-                unit: { 
-                  kind: 'Bytes', 
-                  decimal_places: 1, 
-                  abbreviate: true 
+                unit: {
+                  kind: 'Bytes',
+                  decimal_places: 1,
+                  abbreviate: true,
                 },
               },
             },
@@ -233,24 +241,26 @@ export const dashboardSample: DashboardResource = {
                     plugin: {
                       kind: 'PrometheusTimeSeriesQuery',
                       spec: {
-                        query: 'histogram_quantile(0.99, sum(rate(etcd_disk_wal_fsync_duration_seconds_bucket{job="etcd"}[5m])) by (instance, le))',
+                        query:
+                          'histogram_quantile(0.99, sum(rate(etcd_disk_wal_fsync_duration_seconds_bucket{job="etcd"}[5m])) by (instance, le))',
                         series_name_format: '{{instance}} WAL fsync',
                       },
                     },
                   },
-                },  
+                },
                 {
                   kind: 'TimeSeriesQuery',
                   spec: {
                     plugin: {
                       kind: 'PrometheusTimeSeriesQuery',
                       spec: {
-                        query: 'histogram_quantile(0.99, sum(rate(etcd_disk_backend_commit_duration_seconds_bucket{job="etcd"}[5m])) by (instance, le))',
+                        query:
+                          'histogram_quantile(0.99, sum(rate(etcd_disk_backend_commit_duration_seconds_bucket{job="etcd"}[5m])) by (instance, le))',
                         series_name_format: '{{instance}} DB fsync',
                       },
                     },
                   },
-                }, 
+                },
               ],
               y_axis: {
                 label: 'Time',
@@ -282,15 +292,15 @@ export const dashboardSample: DashboardResource = {
                       },
                     },
                   },
-                },  
+                },
               ],
               y_axis: {
                 label: 'Y Axis Label',
-                unit: { 
-                  kind: 'Bytes', 
+                unit: {
+                  kind: 'Bytes',
                   decimal_places: 1,
                   abbreviate: true,
-                 },
+                },
               },
             },
           },
@@ -313,17 +323,18 @@ export const dashboardSample: DashboardResource = {
                     plugin: {
                       kind: 'PrometheusTimeSeriesQuery',
                       spec: {
-                        query: 'rate(etcd_network_client_grpc_received_bytes_total{job="etcd"}[5m])',
+                        query:
+                          'rate(etcd_network_client_grpc_received_bytes_total{job="etcd"}[5m])',
                         series_name_format: '{{instance}} Client Traffic In',
                       },
                     },
                   },
-                },  
+                },
               ],
               y_axis: {
                 label: 'Y Axis Label',
-                unit: { 
-                  kind: 'Bytes', 
+                unit: {
+                  kind: 'Bytes',
                   decimal_places: 1,
                   abbreviate: true,
                 },
@@ -332,7 +343,7 @@ export const dashboardSample: DashboardResource = {
                 area_opacity: 0.5,
                 point_radius: 6,
                 line_width: 3,
-                connect_nulls: false
+                connect_nulls: false,
               },
             },
           },
@@ -355,26 +366,27 @@ export const dashboardSample: DashboardResource = {
                     plugin: {
                       kind: 'PrometheusTimeSeriesQuery',
                       spec: {
-                        query: 'rate(etcd_network_client_grpc_sent_bytes_total{job="etcd"}[5m])',
+                        query:
+                          'rate(etcd_network_client_grpc_sent_bytes_total{job="etcd"}[5m])',
                         series_name_format: '{{instance}} Client Traffic Out',
                       },
                     },
                   },
-                },  
+                },
               ],
               y_axis: {
                 label: 'Y Axis Label',
-                unit: { 
-                  kind: 'Bytes', 
+                unit: {
+                  kind: 'Bytes',
                   decimal_places: 1,
                   abbreviate: true,
-                 },
+                },
               },
               visual: {
                 area_opacity: 0.5,
                 point_radius: 6,
                 line_width: 3,
-                connect_nulls: false
+                connect_nulls: false,
               },
             },
           },
@@ -397,20 +409,21 @@ export const dashboardSample: DashboardResource = {
                     plugin: {
                       kind: 'PrometheusTimeSeriesQuery',
                       spec: {
-                        query: 'sum(rate(etcd_network_peer_received_bytes_total{job="etcd"}[5m])) by (instance)',
+                        query:
+                          'sum(rate(etcd_network_peer_received_bytes_total{job="etcd"}[5m])) by (instance)',
                         series_name_format: '{{instance}} Peer Traffic In',
                       },
                     },
                   },
-                },  
+                },
               ],
               y_axis: {
                 label: 'Y Axis Label',
-                unit: { 
-                  kind: 'Bytes', 
+                unit: {
+                  kind: 'Bytes',
                   decimal_places: 1,
                   abbreviate: true,
-                 },
+                },
               },
             },
           },
@@ -433,20 +446,21 @@ export const dashboardSample: DashboardResource = {
                     plugin: {
                       kind: 'PrometheusTimeSeriesQuery',
                       spec: {
-                        query: 'sum(rate(etcd_network_peer_sent_bytes_total{job="etcd"}[5m])) by (instance)',
+                        query:
+                          'sum(rate(etcd_network_peer_sent_bytes_total{job="etcd"}[5m])) by (instance)',
                         series_name_format: '{{instance}} Peer Traffic Out',
                       },
                     },
                   },
-                },  
+                },
               ],
               y_axis: {
                 label: 'Y Axis Label',
-                unit: { 
-                  kind: 'Bytes', 
+                unit: {
+                  kind: 'Bytes',
                   decimal_places: 1,
                   abbreviate: true,
-                 },
+                },
               },
             },
           },
@@ -469,7 +483,8 @@ export const dashboardSample: DashboardResource = {
                     plugin: {
                       kind: 'PrometheusTimeSeriesQuery',
                       spec: {
-                        query: 'sum(rate(etcd_server_proposals_failed_total{job="etcd"}[5m]))',
+                        query:
+                          'sum(rate(etcd_server_proposals_failed_total{job="etcd"}[5m]))',
                         series_name_format: 'Proposal Failure Rate',
                       },
                     },
@@ -486,38 +501,40 @@ export const dashboardSample: DashboardResource = {
                       },
                     },
                   },
-                }, 
+                },
                 {
                   kind: 'TimeSeriesQuery',
                   spec: {
                     plugin: {
                       kind: 'PrometheusTimeSeriesQuery',
                       spec: {
-                        query: 'sum(rate(etcd_server_proposals_committed_total{job="etcd"}[5m]))',
+                        query:
+                          'sum(rate(etcd_server_proposals_committed_total{job="etcd"}[5m]))',
                         series_name_format: 'Proposal Commit Rate',
                       },
                     },
                   },
-                }, 
+                },
                 {
                   kind: 'TimeSeriesQuery',
                   spec: {
                     plugin: {
                       kind: 'PrometheusTimeSeriesQuery',
                       spec: {
-                        query: 'sum(rate(etcd_server_proposals_applied_total{job="etcd"}[5m]))',
+                        query:
+                          'sum(rate(etcd_server_proposals_applied_total{job="etcd"}[5m]))',
                         series_name_format: 'Proposal Apply Rate',
                       },
                     },
                   },
-                },   
+                },
               ],
               y_axis: {
                 label: 'Y Axis Label',
-                unit: { 
+                unit: {
                   kind: 'Decimal',
                   decimal_places: 0,
-                 },
+                },
               },
             },
           },
@@ -540,20 +557,22 @@ export const dashboardSample: DashboardResource = {
                     plugin: {
                       kind: 'PrometheusTimeSeriesQuery',
                       spec: {
-                        query: 'changes(etcd_server_leader_changes_seen_total{job="etcd"}[1d])',
-                        series_name_format: '{{instance}} Total Leader Elections Per Day',
+                        query:
+                          'changes(etcd_server_leader_changes_seen_total{job="etcd"}[1d])',
+                        series_name_format:
+                          '{{instance}} Total Leader Elections Per Day',
                       },
                     },
                   },
-                },  
+                },
               ],
               y_axis: {
                 label: 'Y Axis Label',
-                unit: { 
-                  kind: 'Decimal', 
+                unit: {
+                  kind: 'Decimal',
                   decimal_places: 1,
                   abbreviate: true,
-                 },
+                },
               },
             },
           },
@@ -576,24 +595,25 @@ export const dashboardSample: DashboardResource = {
                     plugin: {
                       kind: 'PrometheusTimeSeriesQuery',
                       spec: {
-                        query: 'histogram_quantile(0.99, sum by (instance, le) (rate(etcd_network_peer_round_trip_time_seconds_bucket{job="etcd"}[5m])))',
+                        query:
+                          'histogram_quantile(0.99, sum by (instance, le) (rate(etcd_network_peer_round_trip_time_seconds_bucket{job="etcd"}[5m])))',
                         series_name_format: '{{instance}} Peer round trip time',
                       },
                     },
                   },
-                },  
+                },
               ],
               y_axis: {
                 label: 'Time',
-                unit: { 
-                  kind: 'Seconds', 
+                unit: {
+                  kind: 'Seconds',
                   decimal_places: 3,
-                 },
+                },
               },
             },
           },
         },
-      }    
+      },
     },
     layouts: [
       {
@@ -603,7 +623,7 @@ export const dashboardSample: DashboardResource = {
             {
               x: 0,
               y: 0,
-              width: 4,
+              width: 2,
               height: 8,
               content: {
                 $ref: '#/spec/panels/Panel1',
@@ -612,7 +632,7 @@ export const dashboardSample: DashboardResource = {
             {
               x: 4,
               y: 0,
-              width: 10,
+              width: 5,
               height: 8,
               content: {
                 $ref: '#/spec/panels/Panel2',
@@ -621,7 +641,7 @@ export const dashboardSample: DashboardResource = {
             {
               x: 14,
               y: 0,
-              width: 10,
+              width: 5,
               height: 8,
               content: {
                 $ref: '#/spec/panels/Panel3',
@@ -630,7 +650,7 @@ export const dashboardSample: DashboardResource = {
             {
               x: 0,
               y: 8,
-              width: 8,
+              width: 4,
               height: 8,
               content: {
                 $ref: '#/spec/panels/Panel4',
@@ -639,7 +659,7 @@ export const dashboardSample: DashboardResource = {
             {
               x: 8,
               y: 8,
-              width: 8,
+              width: 4,
               height: 8,
               content: {
                 $ref: '#/spec/panels/Panel5',
@@ -648,16 +668,16 @@ export const dashboardSample: DashboardResource = {
             {
               x: 16,
               y: 8,
-              width: 8,
+              width: 4,
               height: 8,
               content: {
                 $ref: '#/spec/panels/Panel6',
-              }
+              },
             },
             {
               x: 0,
               y: 16,
-              width: 6,
+              width: 3,
               height: 8,
               content: {
                 $ref: '#/spec/panels/Panel7',
@@ -666,7 +686,7 @@ export const dashboardSample: DashboardResource = {
             {
               x: 6,
               y: 16,
-              width: 6,
+              width: 3,
               height: 8,
               content: {
                 $ref: '#/spec/panels/Panel8',
@@ -675,7 +695,7 @@ export const dashboardSample: DashboardResource = {
             {
               x: 12,
               y: 16,
-              width: 6,
+              width: 3,
               height: 8,
               content: {
                 $ref: '#/spec/panels/Panel9',
@@ -684,7 +704,7 @@ export const dashboardSample: DashboardResource = {
             {
               x: 18,
               y: 16,
-              width: 6,
+              width: 3,
               height: 8,
               content: {
                 $ref: '#/spec/panels/Panel10',
@@ -693,7 +713,7 @@ export const dashboardSample: DashboardResource = {
             {
               x: 0,
               y: 24,
-              width: 12,
+              width: 6,
               height: 8,
               content: {
                 $ref: '#/spec/panels/Panel11',
@@ -702,7 +722,7 @@ export const dashboardSample: DashboardResource = {
             {
               x: 12,
               y: 24,
-              width: 12,
+              width: 6,
               height: 8,
               content: {
                 $ref: '#/spec/panels/Panel12',
@@ -711,18 +731,15 @@ export const dashboardSample: DashboardResource = {
             {
               x: 0,
               y: 32,
-              width: 24,
+              width: 12,
               height: 8,
               content: {
                 $ref: '#/spec/panels/Panel13',
               },
             },
-
-    
           ],
         },
       },
-
     ],
   },
 };

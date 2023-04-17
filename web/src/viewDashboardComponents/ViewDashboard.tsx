@@ -1,4 +1,5 @@
-import { ErrorAlert, ErrorBoundary } from '@perses-dev/components';
+import { ErrorBoundary } from '@perses-dev/components';
+import { DashboardResource } from '@perses-dev/core';
 import {
   DashboardProvider,
   DatasourceStoreProvider,
@@ -9,28 +10,19 @@ import {
   TimeRangeProvider,
   useInitialTimeRange,
 } from '@perses-dev/plugin-system';
-import { DashboardApp, DashboardAppProps } from './DashboardApp';
+import { ErrorAlert } from '../components/ErrorAlert';
+import { DashboardApp } from './DashboardApp';
 
-export interface ViewDashboardProps extends DashboardAppProps {
+export interface ViewDashboardProps {
   datasourceApi: DatasourceStoreProviderProps['datasourceApi'];
-  isEditing?: boolean;
+  dashboardResource: DashboardResource;
 }
 
 /**
  * The View for displaying a Dashboard, along with the UI for selecting variable values.
  */
 export function ViewDashboard(props: ViewDashboardProps) {
-  const {
-    dashboardResource,
-    datasourceApi,
-    dashboardTitleComponent,
-    emptyDashboard,
-    onSave,
-    onDiscard,
-    initialVariableIsSticky,
-    isReadonly,
-    isEditing,
-  } = props;
+  const { dashboardResource, datasourceApi } = props;
   const { spec } = dashboardResource;
   const dashboardDuration = spec.duration ?? '1h';
   const initialTimeRange = useInitialTimeRange(dashboardDuration);
@@ -41,7 +33,7 @@ export function ViewDashboard(props: ViewDashboardProps) {
       datasourceApi={datasourceApi}
     >
       <DashboardProvider
-        initialState={{ dashboardResource, isEditMode: !!isEditing }}
+        initialState={{ dashboardResource, isEditMode: false }}
       >
         <TimeRangeProvider
           initialTimeRange={initialTimeRange}
@@ -49,15 +41,7 @@ export function ViewDashboard(props: ViewDashboardProps) {
         >
           <TemplateVariableProvider initialVariableDefinitions={spec.variables}>
             <ErrorBoundary FallbackComponent={ErrorAlert}>
-              <DashboardApp
-                dashboardResource={dashboardResource}
-                dashboardTitleComponent={dashboardTitleComponent}
-                emptyDashboard={emptyDashboard}
-                onSave={onSave}
-                onDiscard={onDiscard}
-                initialVariableIsSticky={initialVariableIsSticky}
-                isReadonly={isReadonly}
-              />
+              <DashboardApp />
             </ErrorBoundary>
           </TemplateVariableProvider>
         </TimeRangeProvider>

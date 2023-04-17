@@ -24,8 +24,6 @@ export default function PersesPage() {
           <ViewDashboard
             dashboardResource={dashboardSample}
             datasourceApi={datasourceApi}
-            initialVariableIsSticky={false}
-            isReadonly={true}
           />
         </PersesDashboardProviders>
       </QueryParamProvider>

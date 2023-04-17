@@ -1,25 +1,12 @@
-import { ErrorAlert, ErrorBoundary } from '@perses-dev/components';
-import { DashboardResource } from '@perses-dev/core';
-import { Dashboard, DashboardProps } from './Dashboard';
+import { ErrorBoundary } from '@perses-dev/components';
+import { ErrorAlert } from '../components/ErrorAlert';
+import { Dashboard } from './Dashboard';
+import { ClusterDropDown } from './dashboardHeader/ClusterDropDown';
+import { DashboardsDropDown } from './dashboardHeader/DashboardsDropDown';
 import { IntervalRefreshDropDown } from './dashboardHeader/IntervalRefreshDropDown';
 import { TimeRangeDropDown } from './dashboardHeader/TimeRangeDropDown';
-import { DashboardsDropDown } from './dashboardHeader/DashboardsDropDown';
-import { ClusterDropDown } from './dashboardHeader/ClusterDropDown';
 
-export interface DashboardAppProps
-  extends Pick<DashboardProps, 'emptyDashboard'> {
-  dashboardResource: DashboardResource;
-  dashboardTitleComponent?: JSX.Element;
-
-  onSave?: (entity: DashboardResource) => Promise<DashboardResource>;
-  onDiscard?: (entity: DashboardResource) => void;
-  initialVariableIsSticky?: boolean;
-  isReadonly: boolean;
-}
-
-export const DashboardApp = (props: DashboardAppProps) => {
-  const { emptyDashboard } = props;
-
+export const DashboardApp = () => {
   return (
     <div>
       <div className="co-m-nav-title co-m-nav-title--detail">
@@ -71,7 +58,7 @@ export const DashboardApp = (props: DashboardAppProps) => {
       </div>
       <div className="co-dashboard-body">
         <ErrorBoundary FallbackComponent={ErrorAlert}>
-          <Dashboard emptyDashboard={emptyDashboard} />
+          <Dashboard />
         </ErrorBoundary>
       </div>
     </div>

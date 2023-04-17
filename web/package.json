@@ -12,7 +12,8 @@
     "start-console": "./start-console.sh",
     "i18n": "i18next \"src/**/*.{js,jsx,ts,tsx}\" [-oc] -c i18next-parser.config.js",
     "ts-node": "ts-node -O '{\"module\":\"commonjs\"}'",
-    "lint": "eslint ./src --fix && stylelint \"src/**/*.css\" --allow-empty-input --fix"
+    "lint": "eslint ./src --fix && stylelint \"src/**/*.css\" --allow-empty-input --fix",
+    "analyze": "source-map-explorer 'dist/*.js'"
   },
   "devDependencies": {
     "@openshift-console/dynamic-plugin-sdk": "0.0.12",
@@ -37,6 +38,7 @@
     "react-i18next": "^11.8.11",
     "react-router": "5.2.0",
     "react-router-dom": "5.2.0",
+    "source-map-explorer": "^2.5.3",
     "style-loader": "^3.3.1",
     "stylelint": "^14.9.1",
     "stylelint-config-prettier": "^9.0.3",
@@ -68,18 +70,21 @@
     "@fontsource/lato": "^4.5.10",
     "@fontsource/roboto": "^4.5.8",
     "@mui/material": "^5.11.1",
-    "@perses-dev/components": "^0.24.0",
-    "@perses-dev/core": "^0.24.0",
-    "@perses-dev/dashboards": "^0.24.0",
-    "@perses-dev/panels-plugin": "^0.24.0",
-    "@perses-dev/plugin-system": "^0.24.0",
-    "@perses-dev/prometheus-plugin": "^0.24.0",
+    "@perses-dev/components": "^0.27.0",
+    "@perses-dev/core": "^0.27.0",
+    "@perses-dev/dashboards": "^0.27.0",
+    "@perses-dev/panels-plugin": "^0.27.0",
+    "@perses-dev/plugin-system": "^0.27.0",
+    "@perses-dev/prometheus-plugin": "^0.27.0",
     "@tanstack/react-query": "^4.27.0",
     "buffer-to-data-url": "^1.0.0",
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
+    "lru-cache": "^7.14.1",
     "lucide-react": "^0.88.0",
-    "react": "^17.0.1",
-    "lru-cache": "^7.14.1"
+    "react": "^17.0.1"
+  },
+  "resolutions": {
+    "@uiw/react-codemirror": "^4.19.16"
   }
 }

@@ -12,7 +12,6 @@
 // limitations under the License.
 
 import { usePlugin, PanelProps } from '@perses-dev/plugin-system';
-import { Skeleton } from '@mui/material';
 import { UnknownSpec } from '@perses-dev/core';
 
 export interface PanelContentProps extends PanelProps<UnknownSpec> {
@@ -31,14 +30,7 @@ export function PanelContent(props: PanelContentProps) {
   const PanelComponent = plugin?.PanelComponent;
 
   if (isLoading) {
-    return (
-      <Skeleton
-        variant="rectangular"
-        width={contentDimensions?.width}
-        height={contentDimensions?.height}
-        aria-label="Loading..."
-      />
-    );
+    return <div style={{ minHeight: '290px' }}>Loading...</div>;
   }
 
   if (PanelComponent === undefined) {

@@ -1,8 +1,11 @@
-import { DateTimeRangePicker, TimeOption } from '@perses-dev/components';
+import { Dropdown, DropdownItem, DropdownToggle } from '@patternfly/react-core';
+import type { TimeOption } from '@perses-dev/components';
+import { isRelativeTimeRange } from '@perses-dev/core';
 import { useTimeRange } from '@perses-dev/plugin-system';
+import { useState } from 'react';
 
 export function TimeRangeDropDown() {
-  const TIME_OPTIONS: TimeOption[] = [
+  const timeRangeOptions: TimeOption[] = [
     { value: { pastDuration: '5m' }, display: 'Last 5 minutes' },
     { value: { pastDuration: '15m' }, display: 'Last 15 minutes' },
     { value: { pastDuration: '30m' }, display: 'Last 30 minutes' },
@@ -14,17 +17,38 @@ export function TimeRangeDropDown() {
     { value: { pastDuration: '14d' }, display: 'Last 14 days' },
   ];
 
+  const [isOpen, setIsOpen] = useState(false);
   const { timeRange, setTimeRange } = useTimeRange();
-  const DEFAULT_HEIGHT = '34px';
-  const height = DEFAULT_HEIGHT;
+
+  const handleSelectedValue = (value: TimeOption['value']) => () => {
+    setIsOpen(false);
+    setTimeRange(value);
+  };
+
+  const toggleIsOpen = () => {
+    setIsOpen(!isOpen);
+  };
 
   return (
     <div>
-      <DateTimeRangePicker
-        timeOptions={TIME_OPTIONS}
-        value={timeRange}
-        onChange={setTimeRange}
-        height={height}
+      <Dropdown
+        dropdownItems={timeRangeOptions.map(({ value, display }) => (
+          <DropdownItem
+            componentID={display}
+            onClick={handleSelectedValue(value)}
+            key={display}
+          >
+            {display}
+          </DropdownItem>
+        ))}
+        isOpen={isOpen}
+        toggle={
+          <DropdownToggle onToggle={toggleIsOpen}>
+            {isRelativeTimeRange(timeRange)
+              ? timeRange.pastDuration
+              : `${timeRange.start} - ${timeRange.end}`}
+          </DropdownToggle>
+        }
       />
     </div>
   );
