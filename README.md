@@ -1,5 +1,7 @@
 # Dashboards Dynamic Plugin for OpenShift Console
 
+# ⚠️ This plugin was moved to the openshift org: https://github.com/openshift/console-dashboards-plugin
+
 This plugin adds custom datasources for openshift dashboards. It requires OpenShift 4.10+
 
 ##
